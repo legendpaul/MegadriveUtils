@@ -1,0 +1,7 @@
+# Build artifacts
+out/
+obj/
+
+# SGDK specific (if any tools generate these in project dir)
+*.lst
+*.map
