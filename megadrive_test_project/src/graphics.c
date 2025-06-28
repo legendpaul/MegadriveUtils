@@ -7,9 +7,9 @@
  * initializing the sprite system, and managing player sprite movement and animation.
  */
 #include "graphics.h"
-#include "resources.h" // For rescomp resources (spr_player, my_tileset)
+#include "resources.h" // For rescomp resources (spr_player, my_tileset, sfx_ping_data)
 #include "animation.h" // For update_player_animation()
-#include "sound.h"     // For play_sfx_ping() and init_sound_system()
+#include "pcm_player.h"  // New - For pcm_player_play()
 #include "input.h"     // For input_is_dpad_xxx_pressed() and input_is_button_pressed()
 
 // --- Tilemap Definition (Example) ---
@@ -136,7 +136,7 @@ void setup_sprites() {
     SPR_setFrame(player_sprite_sgdk, 0);
 
     // Initialize other systems (can also be done in main)
-    // init_sound_system(); // Sound system init called from main.c now
+    // init_sound_system(); // REMOVED - Sound system init called from main.c now by sound_manager_init()
     // input_init();      // Input system init called from main.c now
 }
 
@@ -158,16 +158,16 @@ void setup_sprites() {
  */
 void update_sprites_example() {
     // --- Input-based movement ---
-    if (input_is_dpad_left_pressed()) {
+    if (input_is_held(BUTTON_LEFT)) { // Was input_is_dpad_left_pressed or similar
         player_x -= PLAYER_SPEED;
     }
-    if (input_is_dpad_right_pressed()) {
+    if (input_is_held(BUTTON_RIGHT)) {
         player_x += PLAYER_SPEED;
     }
-    if (input_is_dpad_up_pressed()) {
+    if (input_is_held(BUTTON_UP)) {
         player_y -= PLAYER_SPEED;
     }
-    if (input_is_dpad_down_pressed()) {
+    if (input_is_held(BUTTON_DOWN)) {
         player_y += PLAYER_SPEED;
     }
 
@@ -184,7 +184,7 @@ void update_sprites_example() {
     // --- Sound Trigger ---
     // Play sound if Button A is pressed
     if (input_is_button_pressed(BUTTON_A)) {
-        play_sfx_ping();
+        pcm_player_play(&sfx_ping_data); // Replaced play_sfx_ping()
     }
 
     // Update player animation

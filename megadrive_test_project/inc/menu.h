@@ -3,7 +3,7 @@
 
 #include <genesis.h>
 
-#define MAX_MENU_ITEMS 4 // Current number of test items
+#define MAX_MENU_ITEMS 8 // Was 7
 
 // Initializes the menu system (e.g., sets default selection)
 void menu_init();

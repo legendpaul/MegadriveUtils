@@ -55,6 +55,7 @@ IMAGE logo_minnka_img "gfx/logo_minnka.png" BEST ALL_PALETTE
 #             Rescomp would convert stereo to mono if specified as CHANNELS_1.
 #
 PCM sfx_ping_data "sfx/sfx_ping.raw" SOUND_RATE_8000
+XGM_MUSIC music_track_res "sfx/music_track.xgm"
 # Other resource types like MUSIC (for XGM/TFM music) could also be defined here.
 # Example:
 # XGM music_track "music/my_song.xgm" NONE

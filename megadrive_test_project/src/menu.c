@@ -7,7 +7,9 @@ static const char* menu_items[MAX_MENU_ITEMS] = {
     "1. Show Sprite Demo",
     "2. Show Tilemap",
     "3. Test Fades",
-    "4. Test Inputs"
+    "4. Test Inputs",
+    "5. Scrolling Demo",
+    "6. XGM Music Test" // New item
 };
 
 static s16 current_selection = 0;
@@ -19,12 +21,12 @@ static s16 selected_action_id = -1; // -1 means no action, otherwise use current
 #define MENU_START_X 5  // X position for menu text (in tiles)
 #define MENU_START_Y 8  // Y position for the first menu item (in tiles)
 
-static u16 prev_joy_state = 0; // Store previous joypad state for edge detection
+// Removed: static u16 prev_joy_state = 0; 
 
 void menu_init() {
     current_selection = 0;
     selected_action_id = -1;
-    prev_joy_state = 0; // Reset previous joypad state
+    // Removed: prev_joy_state = 0; 
 
     // Clear VDP planes and set background color for menu
     VDP_clearPlane(BG_A, TRUE);
@@ -49,31 +51,28 @@ void menu_handle_input() {
         return;
     }
 
-    // input_update() should be called once per frame in main.c's game loop
-    u16 current_joy_state = input_get_joy1_state(); 
-    
-    // Edge detection: check for buttons that are pressed now but were not pressed in the previous frame.
-    u16 changed_state = current_joy_state & ~prev_joy_state;
+    // input_update() is called once per frame in main.c's game loop.
+    // Now we use the global input module's edge detection functions.
 
-    if (changed_state & BUTTON_UP) {
+    if (input_is_just_pressed(BUTTON_UP)) {
         current_selection--;
         if (current_selection < 0) {
             current_selection = MAX_MENU_ITEMS - 1;
         }
         menu_draw(); // Redraw menu to show new selection
-    } else if (changed_state & BUTTON_DOWN) {
+    } else if (input_is_just_pressed(BUTTON_DOWN)) {
         current_selection++;
         if (current_selection >= MAX_MENU_ITEMS) {
             current_selection = 0;
         }
         menu_draw(); // Redraw menu
-    } else if (changed_state & (BUTTON_START | BUTTON_A)) {
+    } else if (input_is_just_pressed(BUTTON_START | BUTTON_A)) { // Check for either button
         selected_action_id = current_selection; // Store index of selected item (0 to MAX_MENU_ITEMS-1)
         // Sound for selection could be played here, e.g. play_sfx_ping();
         // This will be handled by main.c based on the action ID.
     }
 
-    prev_joy_state = current_joy_state; // Update previous state for the next frame's edge detection
+    // Removed: prev_joy_state = current_joy_state; 
 }
 
 void menu_draw() {
